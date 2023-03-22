@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import rospy
 import signal
@@ -22,11 +22,8 @@ def launcher(req):
     global exiting_thread
 
     if req.message_type == "LAUNCH":
-        proc = subprocess.Popen(req.command, shell=True, restore_signals=True, stdout=PIPE, stderr=PIPE)
-        try:
-            res = proc.communicate(timeout=0.1)
-        except subprocess.TimeoutExpired:
-            return GStreamerLauncherResponse(True, proc.pid)
+        proc = subprocess.Popen(req.command, shell=True)
+        res = proc.communicate()
 
         return GStreamerLauncherResponse(False, -1)
     elif req.message_type == "EXIT":
